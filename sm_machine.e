@@ -3,10 +3,122 @@
 		Abstract notion of a Finite State Machine (i.e. {SM_MACHINE}).
 		]"
 
-class
+deferred class
 	SM_MACHINE
 
-note
+feature -- Settings
+
+	add_states (a_states: ARRAY [attached like Tuple_value_anchor])
+			-- `add_states' from `a_states' list.
+		require
+			states_have_assertions: across a_states as ic_states all ic_states.item.count > 0 end
+		local
+			l_last_id: INTEGER
+		do
+			l_last_id := states.count
+			across
+				a_states as ic_states
+			loop
+				states.force (ic_states.item, ic_states.cursor_index + l_last_id)
+			end
+		ensure
+			added: old states.count = (states.count - a_states.count)
+		end
+
+feature -- Query
+
+	current_state_id: INTEGER
+			-- `current_state_id' as-in `states' `is_current'
+		require
+			has_states: state_count > 0
+		do
+			across
+				states as ic_states
+			until
+				Result > 0
+			loop
+				if
+					across
+						ic_states.item.state_assertions as ic_state_assertions
+					all
+						attached {FUNCTION [ANY, TUPLE, BOOLEAN]} ic_state_assertions.item as al_assertion_agent and then
+							al_assertion_agent.item ([Void])
+					end
+				then
+					Result := ic_states.key
+				end
+			end
+		ensure
+			has_result: Result > 0
+		end
+
+	is_only_one_current: BOOLEAN
+		do
+			Result := count_of_is_current_states = 1
+		end
+
+	count_of_is_current_states: INTEGER
+			-- Count of `states' that are `is_current'.
+		note
+			synopsis: "[
+				Iterate `states' counting how many have `state_assertions' returning all True.
+				]"
+			design: "[
+				While the answer ought always be zero or one, this assertion is an invariant
+				so it is not applied here as an ensure. See `none_or_one' invariant.
+				]"
+		do
+			across
+				states as ic_states
+			loop
+				if
+					across
+						ic_states.item.state_assertions as ic_state_assertions
+					all
+						attached {FUNCTION [ANY, TUPLE, BOOLEAN]} ic_state_assertions.item as al_assertion_agent and then
+							al_assertion_agent.item ([Void])
+					end
+				then
+					Result := Result + 1
+				end
+			end
+		end
+
+	state_count: INTEGER
+			-- `state_count' of internal `states'.
+		do
+			Result := states.count
+		end
+
+feature {NONE} -- Implementation
+
+	states: HASH_TABLE [attached like tuple_value_anchor, INTEGER]
+			-- `states' like `tuple_value_anchor' of Current {SM_MACHINE}, keyed by {INTEGER} value.
+		attribute
+			create Result.make (default_state_count)
+		end
+
+	tuple_value_anchor: detachable TUPLE [state_assertions: ARRAY [FUNCTION [ANY, TUPLE, BOOLEAN]] ]
+			-- `tuple_value_anchor' with list of {Q}-qualifying `state_assertions', and list of `stop_state_ids'.
+		note
+			synopsis: "[
+				A state is defined by its assertions (e.g. the {P} and {Q} conditions from Hoare's Triple).
+				]"
+		once
+			Result := Void
+		end
+
+feature {NONE} -- Implementation: Constants
+
+	default_state_count: INTEGER = 10
+			-- `default_state_count' of Current at creation.
+
+invariant
+	none_or_one: is_only_one_current implies count_of_is_current_states = 1
+	contiguous_state_ids: across states as ic_states all ic_states.key = ic_states.cursor_index end
+	states_have_assertions: across states as ic_states all ic_states.item.count > 0 end
+
+;note
 	design: "[
 		Background
 		==========
