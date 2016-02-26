@@ -6,23 +6,80 @@
 deferred class
 	SM_MACHINE
 
+feature -- Basic Operations
+
+	transit (a_start, a_stop: INTEGER)
+			-- `transit' from `a_start' to `a_stop'.
+		require
+			one: current_state_id = a_start
+		do
+			across
+				transitions as ic_transitions
+			loop
+				if ic_transitions.item.start = a_start and ic_transitions.item.stop = a_stop then
+					across ic_transitions.item.operations as ic_operations loop ic_operations.item.call (Void) end
+				end
+			end
+		end
+
+	auto_transit
+			-- `auto_transit' from `current_state_id' to next state
+		require
+			one_transit: transition_count_from_current_state_id = 1
+		local
+			l_old_state: INTEGER
+		do
+			across
+				transitions as ic_transitions
+			from
+				l_old_state := current_state_id
+			until
+				l_old_state /= current_state_id
+			loop
+				if ic_transitions.item.start = current_state_id then
+					across ic_transitions.item.operations as ic_operations loop ic_operations.item.call (Void) end
+				end
+			end
+		ensure
+			state_changed: old current_state_id /= current_state_id
+		end
+
 feature -- Settings
 
-	add_states (a_states: ARRAY [attached like Tuple_value_anchor])
+	add_states (a_states: ARRAY [attached like states_value_anchor])
 			-- `add_states' from `a_states' list.
 		require
 			states_have_assertions: across a_states as ic_states all ic_states.item.count > 0 end
-		local
-			l_last_id: INTEGER
 		do
-			l_last_id := states.count
 			across
 				a_states as ic_states
 			loop
-				states.force (ic_states.item, ic_states.cursor_index + l_last_id)
+				add_state (ic_states.item)
 			end
 		ensure
 			added: old states.count = (states.count - a_states.count)
+		end
+
+	add_state (a_state: attached like States_value_anchor)
+			-- `add_state' `a_state' to `states'.
+		require
+			has_assertions: a_state.state_assertions.count > 0
+		do
+			states.force (a_state, states.count + 1)
+		end
+
+	add_transitions (a_transitions: ARRAY [attached like Transition_pair_value_anchor])
+			-- `add_transitions' from `a_transitions' list using `add_transition'.
+		do
+			across a_transitions as ic_transitions loop add_transition (ic_transitions.item) end
+		end
+
+	add_transition (a_transition: attached like Transition_pair_value_anchor)
+			-- `add_transition' in `a_transition'.
+		do
+			transitions.force (a_transition, transitions.count + 1)
+		ensure
+			added: transitions.count = old transitions.count + 1
 		end
 
 feature -- Query
@@ -90,33 +147,72 @@ feature -- Query
 			Result := states.count
 		end
 
-feature {NONE} -- Implementation
-
-	states: HASH_TABLE [attached like tuple_value_anchor, INTEGER]
-			-- `states' like `tuple_value_anchor' of Current {SM_MACHINE}, keyed by {INTEGER} value.
-		attribute
-			create Result.make (default_state_count)
+	transition_count_from_current_state_id: INTEGER
+			-- What is the `transition_count_from_current_state_id'?
+		do
+			across
+				transitions as ic_transitions
+			loop
+				if ic_transitions.item.start = current_state_id then
+					Result := Result + 1
+				end
+			end
+		ensure
+			bounded_count: Result <= transitions.count
 		end
 
-	tuple_value_anchor: detachable TUPLE [state_assertions: ARRAY [FUNCTION [ANY, TUPLE, BOOLEAN]] ]
-			-- `tuple_value_anchor' with list of {Q}-qualifying `state_assertions', and list of `stop_state_ids'.
+feature {NONE} -- Implementation
+
+	states: HASH_TABLE [attached like States_value_anchor, INTEGER]
+			-- `states' like `States_value_anchor' of Current {SM_MACHINE}, keyed by {INTEGER} value.
+		attribute
+			create Result.make (default_state_capacity)
+		end
+
+	States_value_anchor: detachable TUPLE [state_assertions: ARRAY [FUNCTION [ANY, TUPLE, BOOLEAN]] ]
+			-- `states_value_anchor' with list of {Q}-qualifying `state_assertions', and list of `stop_state_ids'.
 		note
 			synopsis: "[
 				A state is defined by its assertions (e.g. the {P} and {Q} conditions from Hoare's Triple).
 				]"
+		require
+			do_not_access: False
+		once
+			Result := Void
+		end
+
+	transitions: HASH_TABLE [attached like Transition_pair_value_anchor, INTEGER]
+			-- `transitions' applied to `states' to transition from `start' to `stop' states using `operations'.
+		attribute
+			create Result.make (default_transition_capacity)
+		end
+
+	Transition_pair_value_anchor: detachable TUPLE [start, stop: INTEGER; operations: ARRAY [PROCEDURE [ANY, TUPLE]]]
+			-- `Transition_pair_value_anchor' defining `start' and `stop' transition-pairs with `operations' to effect them.
+		note
+			synopsis: "[
+				Transition-pairs are always in the form of `start' to `stop'
+				with `operations' to effect the transition.
+				]"
+		require
+			do_not_access: False
 		once
 			Result := Void
 		end
 
 feature {NONE} -- Implementation: Constants
 
-	default_state_count: INTEGER = 10
-			-- `default_state_count' of Current at creation.
+	default_state_capacity: INTEGER = 10
+			-- Reasonable `default_state_capacity' of Current.
+
+	default_transition_capacity: INTEGER = 10
+			-- Reasonable `default_transition_capacity' of Current.
 
 invariant
 	none_or_one: is_only_one_current implies count_of_is_current_states = 1
 	contiguous_state_ids: across states as ic_states all ic_states.key = ic_states.cursor_index end
 	states_have_assertions: across states as ic_states all ic_states.item.count > 0 end
+	contiguous_transition_ids: across transitions as ic_transitions all ic_transitions.key = ic_transitions.cursor_index end
 
 ;note
 	design: "[
