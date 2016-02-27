@@ -25,6 +25,7 @@ feature -- Basic Operations
 			-- `transit' by calling transition operations for transitions from `a_start' to `a_stop'.
 		require
 			one: current_state_id = a_start
+			is_valid: is_valid_transition (a_start, a_stop)
 		do
 			across
 				transitions as ic_transitions
@@ -44,12 +45,14 @@ feature -- Basic Operations
 		ensure
 			perhaps_same: (old current_state_id /= current_state_id) or
 							(old current_state_id = current_state_id)
+			current_is_stop: current_state_id = a_stop
 		end
 
 	auto_transit
 			-- `auto_transit' from `current_state_id' to next state
 		require
 			one_transit: transition_count_from_current_state_id = 1
+			at_least_two: state_count >= 2
 		local
 			l_old_state: INTEGER
 		do
@@ -94,6 +97,8 @@ feature -- Settings
 		do
 			states.force (a_state, states.count + 1)
 			compute_current_state_id
+		ensure
+			added: states.count = (old states.count + 1)
 		end
 
 	add_transitions (a_transitions: ARRAY [attached like Transition_pair_value_anchor])
@@ -194,6 +199,15 @@ feature -- Query
 			end
 		ensure
 			bounded_count: Result <= transitions.count
+		end
+
+	is_valid_transition (a_start,a_stop: INTEGER): BOOLEAN
+		do
+			Result := across
+				transitions as ic_transitions
+			some
+				ic_transitions.item.start = a_start and ic_transitions.item.stop = a_stop
+			end
 		end
 
 feature {NONE} -- Implementation
