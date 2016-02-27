@@ -222,7 +222,7 @@ feature {NONE} -- Implementation
 			create Result.make (default_transition_capacity)
 		end
 
-	Transition_pair_value_anchor: detachable TUPLE [start, stop: INTEGER; operations: ARRAY [PROCEDURE [ANY, TUPLE]]]
+	Transition_pair_value_anchor: detachable TUPLE [start, stop: INTEGER; operations: ARRAY [PROCEDURE [ANY, TUPLE]] ]
 			-- `Transition_pair_value_anchor' defining `start' and `stop' transition-pairs with `operations' to effect them.
 		note
 			synopsis: "[

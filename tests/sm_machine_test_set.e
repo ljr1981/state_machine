@@ -34,6 +34,7 @@ feature -- Test routines
 			blah_data := 1 -- Sets up for the initial state.
 
 			create l_machine
+			
 				-- No states means zero count.
 			assert_integers_equal ("zero_count", 0, l_machine.state_count)
 
