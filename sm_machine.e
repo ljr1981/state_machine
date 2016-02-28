@@ -226,11 +226,19 @@ feature -- Query
 				Test = sm_persistence_machine_creation
 			]"
 		do
---			Result := not across
---							transitions as ic_transitions
---						some
---							ic_transitions.item.start = a_transition.start and ic_transitions.item.stop = a_transition.stop
---						end
+--			across
+--				transitions as ic_transitions
+--			loop
+--				Result := across
+--					ic_transitions.item.operations as ic_operations
+--				some
+--					not across
+--						a_transition.operations as ic_transition_operations
+--					some
+--						ic_operations.item.hash_code = ic_transition_operations.item.hash_code
+--					end
+--				end
+--			end
 			Result := False
 		end
 
