@@ -45,16 +45,16 @@ feature {NONE} -- Initialization
 
 			add_transitions (<<
 							-- From Clean -> ...
-						[1, 2, <<agent apply_edit>>],
-						[1, 3, <<agent apply_edit>>],
+						create {SM_TRANSITION}.make (1, 2, <<agent apply_edit>>),
+						create {SM_TRANSITION}.make (1, 3, <<agent apply_edit>>),
 							-- From Dirty-valid -> ...
-						[2, 2, <<agent apply_edit>>],
-						[2, 3, <<agent apply_edit>>],
-						[2, 1, <<agent save_data>>],
-						[2, 1, <<agent cancel>>],
+						create {SM_TRANSITION}.make (2, 2, <<agent apply_edit>>),
+						create {SM_TRANSITION}.make (2, 3, <<agent apply_edit>>),
+						create {SM_TRANSITION}.make (2, 1, <<agent save_data>>),
+						create {SM_TRANSITION}.make (2, 1, <<agent cancel>>),
 							-- From Dirty-invalid -> ...
-						[3, 2, <<agent apply_edit>>],
-						[3, 1, <<agent cancel>>]
+						create {SM_TRANSITION}.make (3, 2, <<agent apply_edit>>),
+						create {SM_TRANSITION}.make (3, 1, <<agent cancel>>)
 						>>)
 		end
 

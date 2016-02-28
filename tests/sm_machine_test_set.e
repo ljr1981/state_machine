@@ -34,7 +34,7 @@ feature -- Test routines
 			blah_data := 1 -- Sets up for the initial state.
 
 			create l_machine
-			
+
 				-- No states means zero count.
 			assert_integers_equal ("zero_count", 0, l_machine.state_count)
 
@@ -48,8 +48,8 @@ feature -- Test routines
 			assert_integers_not_equal ("not_other", 2, l_machine.current_state_id)
 
 				-- Add a couple of transitions ...
-			l_machine.add_transition ([1, 2, <<agent one_to_two>>])
-			l_machine.add_transition ([2, 1, <<agent two_to_one>>])
+			l_machine.add_transition (create {SM_TRANSITION}.make (1, 2, <<agent one_to_two>>))
+			l_machine.add_transition (create {SM_TRANSITION}.make (2, 1, <<agent two_to_one>>))
 
 				-- We are state one, now go to two ...
 			l_machine.transit (1, 2)

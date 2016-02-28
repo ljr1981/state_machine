@@ -219,27 +219,17 @@ feature -- Query
 		end
 
 	has_transition (a_transition: attached like transition_pair_value_anchor): BOOLEAN
-		note
-			todo: "[
-				Start Stop test is not good enough. Test for same or different agents in a_transition.operations
-				Uncommenting this code will cause a test failure. Correct this code to make that test pass.
-				Test = sm_persistence_machine_creation
-			]"
+			-- Does `transitions' `has_transition' `a_transition'?
 		do
---			across
---				transitions as ic_transitions
---			loop
---				Result := across
---					ic_transitions.item.operations as ic_operations
---				some
---					not across
---						a_transition.operations as ic_transition_operations
---					some
---						ic_operations.item.hash_code = ic_transition_operations.item.hash_code
---					end
---				end
---			end
-			Result := False
+			if transitions.count > 0 then
+				Result := across
+					transitions as ic_transitions
+				all
+					ic_transitions.item.uuid = a_transition.uuid
+				end
+			else
+				Result := False
+			end
 		end
 
 feature {NONE} -- Implementation
@@ -268,7 +258,7 @@ feature {NONE} -- Implementation
 			create Result.make (default_transition_capacity)
 		end
 
-	Transition_pair_value_anchor: detachable TUPLE [start, stop: INTEGER; operations: ARRAY [PROCEDURE [ANY, TUPLE]] ]
+	Transition_pair_value_anchor: detachable SM_TRANSITION -- TUPLE [start, stop: INTEGER; operations: ARRAY [PROCEDURE [ANY, TUPLE]]; uuid: UUID ]
 			-- `Transition_pair_value_anchor' defining `start' and `stop' transition-pairs with `operations' to effect them.
 		note
 			synopsis: "[
