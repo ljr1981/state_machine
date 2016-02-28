@@ -110,6 +110,8 @@ feature -- Settings
 
 	add_transition (a_transition: attached like Transition_pair_value_anchor)
 			-- `add_transition' in `a_transition'.
+		require
+			not_contains: not has_transition (a_transition)
 		do
 			transitions.force (a_transition, transitions.count + 1)
 			compute_current_state_id
@@ -150,6 +152,7 @@ feature -- Query
 		end
 
 	is_only_one_current: BOOLEAN
+				-- For all current states `is_only_one_current'.
 		do
 			Result := count_of_is_current_states = 1
 		end
@@ -189,6 +192,8 @@ feature -- Query
 
 	transition_count_from_current_state_id: INTEGER
 			-- What is the `transition_count_from_current_state_id'?
+		require
+			not_zero: current_state_id > 0
 		do
 			across
 				transitions as ic_transitions
@@ -202,12 +207,31 @@ feature -- Query
 		end
 
 	is_valid_transition (a_start,a_stop: INTEGER): BOOLEAN
+			-- `is_valid_transition' for `a_start' to `a_stop'.
 		do
 			Result := across
 				transitions as ic_transitions
 			some
 				ic_transitions.item.start = a_start and ic_transitions.item.stop = a_stop
 			end
+		ensure
+			empty_implies_false: (transitions.count = 0) implies not Result
+		end
+
+	has_transition (a_transition: attached like transition_pair_value_anchor): BOOLEAN
+		note
+			todo: "[
+				Start Stop test is not good enough. Test for same or different agents in a_transition.operations
+				Uncommenting this code will cause a test failure. Correct this code to make that test pass.
+				Test = sm_persistence_machine_creation
+			]"
+		do
+--			Result := not across
+--							transitions as ic_transitions
+--						some
+--							ic_transitions.item.start = a_transition.start and ic_transitions.item.stop = a_transition.stop
+--						end
+			Result := False
 		end
 
 feature {NONE} -- Implementation
