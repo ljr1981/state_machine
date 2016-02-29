@@ -28,7 +28,7 @@ feature {NONE} -- Initialization
 			start := a_start
 			stop := a_stop
 			operations := a_operations
-			create uuid.make (randomizer.random_integer.to_natural_32, randomizer.random_integer.to_natural_16, randomizer.random_integer.to_natural_16, randomizer.random_integer.to_natural_16, randomizer.random_integer.to_natural_32)
+			uuid := randomizer.uuid
 		ensure
 			start_set: start = a_start
 			stop_set: stop = a_stop
