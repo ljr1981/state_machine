@@ -15,9 +15,9 @@ deferred class
 	SM_MACHINE
 
 inherit
-	PS_SUBSCRIBER [ANY]
+	PS_SUBSCRIPTION [ANY]
 
-	PS_PUBLISHER [ANY]
+	PS_PUBLICATION [ANY]
 
 feature -- Basic Operations
 
