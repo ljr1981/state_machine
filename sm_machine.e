@@ -15,9 +15,15 @@ deferred class
 	SM_MACHINE
 
 inherit
-	PS_SUBSCRIPTION [ANY]
+	PS_SUBSCRIBER [ANY]
+		rename
+			add_subscription as add_post_transition_event
+		end
 
-	PS_PUBLICATION [ANY]
+	PS_PUBLISHER [ANY]
+		rename
+			add_subscription as add_transition_event
+		end
 
 feature -- Basic Operations
 
