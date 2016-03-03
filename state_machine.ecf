@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-15-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-15-0 http://www.eiffel.com/developers/xml/configuration-1-15-0.xsd" name="state_machine" uuid="359B041E-6853-400D-80F2-51BCB21211F0">
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-15-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-15-0 http://www.eiffel.com/developers/xml/configuration-1-15-0.xsd" name="state_machine" uuid="359B041E-6853-400D-80F2-51BCB21211F0" library_target="state_machine">
+	<description>Complex Finite State Machine implementation</description>
 	<target name="state_machine">
 		<root all_classes="true"/>
 		<option warning="true" is_obsolete_routine_type="true" void_safety="transitional" syntax="provisional">
