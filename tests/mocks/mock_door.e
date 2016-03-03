@@ -12,7 +12,7 @@ inherit
 create
 	make_with_machine
 
-feature {NONE} -- Initialization
+feature {NONE} -- Initialization: FSM
 
 	pre_make_initialization
 			-- <Precursor>
