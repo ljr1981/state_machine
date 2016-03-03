@@ -23,6 +23,24 @@ inherit
 
 feature -- Test routines
 
+	turnstile_tests
+		local
+			l_machine: MOCK_MACHINE
+			l_mock: MOCK_TURNSTILE
+		do
+			create l_machine
+			create l_mock.make_with_machine (l_machine)
+
+			l_mock.locked_push.do_event ([Void])
+			assert ("test_is_locked_1", l_mock.is_locked)
+			l_mock.locked_coin.do_event ([Void])
+			assert ("test_is_unlocked_1", l_mock.is_unlocked)
+			l_mock.unlocked_coin.do_event ([Void])
+			assert ("test_is_unlocked_2", l_mock.is_unlocked)
+			l_mock.unlocked_push.do_event ([Void])
+			assert ("test_is_locked_2", l_mock.is_locked)
+		end
+
 	state_machine_pub_sub_tests
 			-- `state_machine_pub_sub_tests' for testing FSM's with the PUB-SUB model.
 		note
