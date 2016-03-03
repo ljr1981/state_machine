@@ -2,162 +2,147 @@ note
 	description: "[
 		Representation of a {MOCK_DOOR}
 		]"
-	design: "[
-		Basic Workflow
-		==============
-		The following represents the basic workflow/use-case for this object.
-		
-		Pre-requisite/Precondition
-		--------------------------
-		- Create DOOR
-		- DOOR is in Closed state
-
-		Open
-		----
-		- DOOR receives "open-door" signal (from itself or external)
-		- DOOR processes "open-door" signal
-		- DOOR signals "open-door" event trigger command
-
-		- FSM receives "open-door" event trigger command
-		- FSM processes "open-door" transitions
-		- FSM signals "post-open-door" event trigger command
-
-		- DOOR receives/processes "post-open-door" event trigger command
-		- DOOR processes "post-open-door" operation
-		
-		Prep-based-on-Open
-		------------------
-		- 
-		]"
 
 class
 	MOCK_DOOR
 
 inherit
-	PS_SUBSCRIBER [ANY]
-		rename
-			add_subscription as add_post_transition_event
-		end
-
-	PS_PUBLISHER [ANY]
-		rename
-			add_subscription as add_transition_event
-		end
+	SM_OBJECT
 
 create
-	make_closed,
-	make_opened
+	make_with_machine
 
 feature {NONE} -- Initialization
+
+	pre_make_initialization
+			-- <Precursor>
+		do
+			-- Prep with start state
+			make_closed
+		end
+
+	initialize_state_assertions (a_machine: SM_MACHINE)
+			-- <Precursor>
+		do
+			a_machine.add_state ([<<agent is_fully_closed>>])
+			a_machine.add_state ([<<agent is_fully_opened>>])
+		end
+
+	initialize_transition_operations (a_machine: SM_MACHINE)
+			-- <Precursor>
+		do
+			a_machine.add_transitions (<<
+										create {SM_TRANSITION}.make (1, 2, agent set_open_agent, <<agent set_opened>>, <<agent set_fully_opened>>),
+										create {SM_TRANSITION}.make (2, 1, agent set_close_agent, <<agent set_closed>>, <<agent set_fully_closed>>)
+										>>)
+		end
+
+	initialize_transition_triggers (a_machine: SM_MACHINE)
+			-- <Precursor>
+		do
+--			a_machine.add_transition_event (agent open)
+--			a_machine.add_transition_event (agent close)
+		end
+
+	initialize_post_transition_operations (a_machine: SM_MACHINE)
+			-- <Precursor>
+		do
+			-- 4. Define Post-transition operations
+--			a_machine.add_post_transition_event ([agent on_post_open (?), 1])
+--			a_machine.add_post_transition_event ([agent on_post_close (?), 2])
+		end
+
+feature {NONE} -- Initialization: Current
 
 	make_opened
 			-- `make_opened'.
 		do
-			opened := True
-			fully_opened := True
-			initialize
-		ensure
-			open: opened
-			not_closed: not closed and not fully_closed
+			is_opened := True
+			is_fully_opened := True
 		end
 
 	make_closed
 			-- `make_closed'.
 		do
-			closed := True
-			fully_closed := True
-			initialize
-		ensure
-			closed: closed and fully_closed
-			not_open: not opened and not fully_opened
+			is_closed := True
+			is_fully_closed := True
 		end
 
-	initialize
-			-- `initialize' Current {MOCK_DOOR}.
-		do
-				-- Publish an event for opening the door
-			create on_open_publication
-			add_publication (on_open_publication)
-				-- Handle a subscription to the post-opening event
-			create on_post_open_subscription
-			add_subscriptions (<<on_post_open_subscription>>)
-		end
+feature -- State Assertions
 
-feature -- Event Publications
+	is_opened: BOOLEAN
 
-	on_open_publication: PS_PUBLICATION [ANY]
+	is_fully_opened: BOOLEAN
 
-feature -- Event Subscriptions
+	is_closed: BOOLEAN
 
-	on_post_open_subscription: PS_SUBSCRIPTION [ANY]
+	is_fully_closed: BOOLEAN
 
-feature -- Basic Operations
-
-	open
-			-- `open' to `opened' through state machine.
-		do
-			on_open_publication.set_data_and_publish (Void)
-		end
-
-	close
-			-- `close' to `closed' through state machine.
-		do
-
-		end
-
-feature -- Settings
+feature -- Transition Operations
 
 	set_opened
+			-- Set `is_opened'
 		do
-			closed := False
-			fully_closed := False
-			opened := True
+			is_opened := True
+			is_fully_opened := False
+			is_closed := False
+			is_fully_closed := False
+		end
+
+	set_fully_opened
+		do
+			is_opened := True
+			is_fully_opened := True
+			is_closed := False
+			is_fully_closed := False
 		end
 
 	set_closed
 		do
-
+			is_opened := False
+			is_fully_opened := False
+			is_closed := True
+			is_fully_closed := False
 		end
 
-feature -- Event Handlers
-
-	on_open (a_data: ANY)
-			-- What happens `on_open' event?
-		require
-			closed: closed and fully_closed
+	set_fully_closed
 		do
-			set_opened
-		ensure
-			not_closed: not closed and not fully_closed
-			opened: opened
+			is_opened := False
+			is_fully_opened := False
+			is_closed := True
+			is_fully_closed := True
 		end
 
-	on_post_open (a_data: ANY)
-			-- What happens after `on_open_event'
-		require
-			not_closed: not closed and not fully_closed
-			opened: opened
+feature -- Transition Triggers
+
+	open (a_data: detachable ANY)
+			-- `open' Current {MOCK_DOOR}.
 		do
-			fully_opened := True
-		ensure
-			not_closed: not closed and not fully_closed
-			opened: opened and fully_opened
+			check attached open_agent as al_agent then al_agent.call (a_data) end
 		end
 
-	on_close
-			-- What happens `on_close' event?
+	open_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
+
+	set_open_agent (a_agent: like open_agent)
 		do
-
+			open_agent := a_agent
 		end
 
-feature -- Status Report
+	close (a_data: detachable ANY)
+			-- `close' Current {MOCK_DOOR}.
+		do
+			check attached close_agent as al_agent then al_agent.call (a_data) end
+		end
 
-	opened: BOOLEAN
+	close_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
 
-	fully_opened: BOOLEAN
+	set_close_agent (a_agent: like close_agent)
+		do
+			close_agent := a_agent
+		end
 
-	closed: BOOLEAN
-
-	fully_closed: BOOLEAN
+invariant
+	some_opened: (is_opened or is_fully_opened) implies (not is_closed and not is_fully_closed)
+	some_closed: (is_closed or is_fully_closed) implies (not is_opened and not is_fully_opened)
 
 end

@@ -45,17 +45,27 @@ feature {NONE} -- Initialization
 
 			add_transitions (<<
 							-- From Clean -> ...
-						create {SM_TRANSITION}.make (1, 2, <<agent apply_edit>>),
-						create {SM_TRANSITION}.make (1, 3, <<agent apply_edit>>),
+						create {SM_TRANSITION}.make (1, 2, agent trigger_feature, <<agent apply_edit>>, <<agent post_trigger_feature>>),
+						create {SM_TRANSITION}.make (1, 3, agent trigger_feature, <<agent apply_edit>>, <<agent post_trigger_feature>>),
 							-- From Dirty-valid -> ...
-						create {SM_TRANSITION}.make (2, 2, <<agent apply_edit>>),
-						create {SM_TRANSITION}.make (2, 3, <<agent apply_edit>>),
-						create {SM_TRANSITION}.make (2, 1, <<agent save_data>>),
-						create {SM_TRANSITION}.make (2, 1, <<agent cancel>>),
+						create {SM_TRANSITION}.make (2, 2, agent trigger_feature, <<agent apply_edit>>, <<agent post_trigger_feature>>),
+						create {SM_TRANSITION}.make (2, 3, agent trigger_feature, <<agent apply_edit>>, <<agent post_trigger_feature>>),
+						create {SM_TRANSITION}.make (2, 1, agent trigger_feature, <<agent save_data>>, <<agent post_trigger_feature>>),
+						create {SM_TRANSITION}.make (2, 1, agent trigger_feature, <<agent cancel>>, <<agent post_trigger_feature>>),
 							-- From Dirty-invalid -> ...
-						create {SM_TRANSITION}.make (3, 2, <<agent apply_edit>>),
-						create {SM_TRANSITION}.make (3, 1, <<agent cancel>>)
+						create {SM_TRANSITION}.make (3, 2, agent trigger_feature, <<agent apply_edit>>, <<agent post_trigger_feature>>),
+						create {SM_TRANSITION}.make (3, 1, agent trigger_feature, <<agent cancel>>, <<agent post_trigger_feature>>)
 						>>)
+		end
+
+	trigger_feature (a_data: detachable ANY)
+		do
+
+		end
+
+	post_trigger_feature (a_data: detachable ANY)
+		do
+
 		end
 
 feature -- Status Report

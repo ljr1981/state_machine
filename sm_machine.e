@@ -15,14 +15,17 @@ deferred class
 	SM_MACHINE
 
 inherit
-	PS_SUBSCRIBER [ANY]
+	PS_PUBLISHER_SUBSCRIBER [detachable ANY]
 		rename
-			add_subscription as add_post_transition_event
-		end
-
-	PS_PUBLISHER [ANY]
-		rename
-			add_subscription as add_transition_event
+			subscriber_add_subscription as add_transition_event,
+			publisher_add_subscription as add_post_transition_event
+		export {NONE}
+			add_publication,
+			add_publications,
+			add_subscription_agents,
+			--publications,
+			subscribe_to_publication --,
+			--subscriptions
 		end
 
 feature -- Basic Operations
@@ -230,7 +233,7 @@ feature -- Query
 			if transitions.count > 0 then
 				Result := across
 					transitions as ic_transitions
-				all
+				some
 					ic_transitions.item.uuid = a_transition.uuid
 				end
 			else

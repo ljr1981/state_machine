@@ -48,8 +48,8 @@ feature -- Test routines
 			assert_integers_not_equal ("not_other", 2, l_machine.current_state_id)
 
 				-- Add a couple of transitions ...
-			l_machine.add_transition (create {SM_TRANSITION}.make (1, 2, <<agent one_to_two>>))
-			l_machine.add_transition (create {SM_TRANSITION}.make (2, 1, <<agent two_to_one>>))
+			l_machine.add_transition (create {SM_TRANSITION}.make (1, 2, agent trigger_event_feature, <<agent one_to_two>>, <<agent post_trigger_feature>>))
+			l_machine.add_transition (create {SM_TRANSITION}.make (2, 1, agent trigger_event_feature, <<agent two_to_one>>, <<agent post_trigger_feature>>))
 
 				-- We are state one, now go to two ...
 			l_machine.transit (1, 2)
@@ -67,6 +67,16 @@ feature -- Test routines
 		end
 
 feature {NONE} -- Implementation: State-related
+
+	trigger_event_feature (a_data: detachable ANY)
+		do
+
+		end
+
+	post_trigger_feature (a_data: detachable ANY)
+		do
+			
+		end
 
 	blah_data: INTEGER
 			-- `blah_data' of Current.
