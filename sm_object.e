@@ -2,6 +2,25 @@ note
 	description: "[
 		Abstract notion of a {SM_MACHINE} managed {SM_OBJECT}.
 		]"
+	example: "[
+		inherit
+			SM_OBJECT
+
+		create
+			make_with_machine
+			
+		NOTE: Be sure to always use `make_with_machine' as the
+		creation procedure and then implement the deferred
+		features as noted in this class:
+		
+		`pre_make_initialization'
+		`initialize_state_assertions'
+		`initialize_transition_operations'
+
+		These three features (above) handle the entire process
+		of initializing this class properly.
+		]"
+
 
 deferred class
 	SM_OBJECT

@@ -2,6 +2,19 @@ note
 	description: "[
 		Representation of a {SM_TRIGGER}.
 		]"
+	example: "[
+		In an class inheriting from SM_OBJECT:
+		
+		1. Create a new feature group: Transition Triggers
+		2. Add one SM_TRIGGER feature for every trigger.
+		
+		Ex: close: SM_TRIGGER
+		
+		Be sure to "create" the trigger feature in the
+		`pre_make_intialization' feature of the SM_OBJECT.
+		
+		See: {MOCK_DOOR}.pre_make_initialization and {MOCK_DOOR}.close
+		]"
 
 class
 	SM_TRIGGER

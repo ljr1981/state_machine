@@ -10,6 +10,11 @@ note
 		of agents in the operation agents. So, it was decided that a simple UUID would be
 		sufficient to "tag" each {SM_TRANSITION} created.
 		]"
+	example: "[
+		See {MOCK_DOOR}.initialize_transition_operations
+		
+			a_machine.add_state ([<<agent is_fully_closed>>])
+		]"
 
 class
 	SM_TRANSITION
