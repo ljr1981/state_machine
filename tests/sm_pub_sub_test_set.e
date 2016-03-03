@@ -44,11 +44,15 @@ feature -- Test routines
 			assert ("test_is_closed", l_mock.is_closed)
 			assert ("test_is_fully_closed", l_mock.is_fully_closed)
 
-				-- Attempt to transit ...
+				-- Attempt to auto_transit ...
 			l_machine.auto_transit
 			assert ("test_is_opened", l_mock.is_opened)
 			assert ("test_is_fully_opened", l_mock.is_fully_opened)
 
+				-- Attempt to transit ...
+			l_machine.transit (2, 1)
+			assert ("test_is_closed", l_mock.is_closed)
+			assert ("test_is_fully_closed", l_mock.is_fully_closed)
 		end
 
 end
