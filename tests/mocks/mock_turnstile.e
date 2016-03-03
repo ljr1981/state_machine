@@ -34,28 +34,20 @@ feature {NONE} -- Initialization: FSM
 	initialize_transition_operations (a_machine: SM_MACHINE)
 			-- <Precursor>
 		do
-			a_machine.add_transitions (<<
-					create {SM_TRANSITION}.make (1, 1, agent locked_push.set_event_agent, <<agent set_locked>>, <<>>),
-					create {SM_TRANSITION}.make (1, 2, agent locked_coin.set_event_agent, <<agent set_unlocked>>, <<>>),
-					create {SM_TRANSITION}.make (2, 1, agent unlocked_push.set_event_agent, <<agent set_locked>>, <<>>),
-					create {SM_TRANSITION}.make (2, 2, agent unlocked_coin.set_event_agent, <<agent set_unlocked>>, <<>>)
+			a_machine.add_transitions (<<		-- From		To			set on-Trigger							do Transition ops							Post-trans ops
+					create {SM_TRANSITION}.make (locked, 	locked, 	agent locked_push.set_do_agent, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
+					create {SM_TRANSITION}.make (locked, 	unlocked, 	agent locked_coin.set_do_agent, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>),
+					create {SM_TRANSITION}.make (unlocked, 	locked, 	agent unlocked_push.set_do_agent, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
+					create {SM_TRANSITION}.make (unlocked, 	unlocked, 	agent unlocked_coin.set_do_agent, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>)
 										>>)
 		end
 
 feature -- Transition Operations
 
-	set_locked
-			-- Set `is_locked'.
+	set_turnstile_lock_to (a_key: BOOLEAN)
+			-- `set_turnstile_lock_to' `a_key' to set `is_locked' or `is_unlocked'.
 		do
-			is_locked := True
-			is_unlocked := False
-		end
-
-	set_unlocked
-			-- Set `is_unlocked'.
-		do
-			is_locked := False
-			is_unlocked := True
+			is_locked := a_key
 		end
 
 feature -- State Assertions
@@ -63,6 +55,10 @@ feature -- State Assertions
 	is_locked: BOOLEAN
 
 	is_unlocked: BOOLEAN
+			-- `is_unlocked' is not `is_locked'
+		do
+			Result := not is_locked
+		end
 
 feature -- Transition Triggers
 
@@ -70,5 +66,12 @@ feature -- Transition Triggers
 	locked_coin,
 	unlocked_push,
 	unlocked_coin: SM_TRIGGER
+
+feature {NONE} -- Implementation: Constants
+
+	locked: INTEGER = 1
+	unlocked: INTEGER = 2
+	lock_it: BOOLEAN = True
+	unlock_it: BOOLEAN = False
 
 end

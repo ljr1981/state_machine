@@ -35,8 +35,8 @@ feature {NONE} -- Initialization: FSM
 			-- <Precursor>
 		do
 			a_machine.add_transitions (<<
-					create {SM_TRANSITION}.make (1, 2, agent open.set_event_agent, <<agent set_opened>>, <<agent set_fully_opened>>),
-					create {SM_TRANSITION}.make (2, 1, agent close.set_event_agent, <<agent set_closed>>, <<agent set_fully_closed>>)
+					create {SM_TRANSITION}.make (1, 2, agent open.set_do_agent, <<agent set_opened>>, <<agent set_fully_opened>>),
+					create {SM_TRANSITION}.make (2, 1, agent close.set_do_agent, <<agent set_closed>>, <<agent set_fully_closed>>)
 										>>)
 		end
 
