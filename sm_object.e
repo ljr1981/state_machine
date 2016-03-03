@@ -20,8 +20,6 @@ feature {NONE} -- Initialization
 		do
 			initialize_state_assertions (a_machine)
 			initialize_transition_operations (a_machine)
-			initialize_transition_triggers (a_machine)
-			initialize_post_transition_operations (a_machine)
 		end
 
 	pre_make_initialization
@@ -36,16 +34,6 @@ feature {NONE} -- Initialization
 
 	initialize_transition_operations (a_machine: SM_MACHINE)
 			-- `initialize_transition_operations' in `a_machine'.
-		deferred
-		end
-
-	initialize_transition_triggers (a_machine: SM_MACHINE)
-			-- `initialize_transition_triggers' in `a_machine'.
-		deferred
-		end
-
-	initialize_post_transition_operations (a_machine: SM_MACHINE)
-			-- `initialize_post_transition_operations' in `a_machine'.
 		deferred
 		end
 

@@ -37,21 +37,6 @@ feature {NONE} -- Initialization
 										>>)
 		end
 
-	initialize_transition_triggers (a_machine: SM_MACHINE)
-			-- <Precursor>
-		do
---			a_machine.add_transition_event (agent open)
---			a_machine.add_transition_event (agent close)
-		end
-
-	initialize_post_transition_operations (a_machine: SM_MACHINE)
-			-- <Precursor>
-		do
-			-- 4. Define Post-transition operations
---			a_machine.add_post_transition_event ([agent on_post_open (?), 1])
---			a_machine.add_post_transition_event ([agent on_post_close (?), 2])
-		end
-
 feature {NONE} -- Initialization: Current
 
 	make_opened
