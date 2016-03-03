@@ -28,8 +28,8 @@ feature -- Test routines
 		note
 			testing:  "execution/isolated"
 		local
-			l_mock: MOCK_DOOR
 			l_machine: MOCK_MACHINE
+			l_mock: MOCK_DOOR
 		do
 			create l_machine
 			create l_mock.make_with_machine (l_machine)
@@ -43,6 +43,12 @@ feature -- Test routines
 			l_mock.close (Void)
 			assert ("test_is_closed", l_mock.is_closed)
 			assert ("test_is_fully_closed", l_mock.is_fully_closed)
+
+				-- Attempt to transit ...
+			l_machine.auto_transit
+			assert ("test_is_opened", l_mock.is_opened)
+			assert ("test_is_fully_opened", l_mock.is_fully_opened)
+
 		end
 
 end

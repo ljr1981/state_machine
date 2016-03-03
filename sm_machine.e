@@ -71,7 +71,8 @@ feature -- Basic Operations
 				l_old_state /= current_state_id
 			loop
 				if ic_transitions.item.start = current_state_id then
-					across ic_transitions.item.operations as ic_operations loop ic_operations.item.call (Void) end
+					across ic_transitions.item.operations as ic_operations loop ic_operations.item.call ([Void]) end
+					across ic_transitions.item.post_transition_operations as ic_post_ops loop ic_post_ops.item.call ([Void])  end
 				end
 			end
 			compute_current_state_id

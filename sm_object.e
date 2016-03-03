@@ -17,7 +17,12 @@ feature {NONE} -- Initialization
 
 	make_with_machine (a_machine: SM_MACHINE)
 			-- `make_with_machine_and_object' using `a_machine'.
+			-- Basic intialization operations are:
+			-- 1. `pre_make_initialization'
+			-- 2. `initialize_state_assertions'
+			-- 3. `initialize_transition_operations'
 		do
+			pre_make_initialization
 			initialize_state_assertions (a_machine)
 			initialize_transition_operations (a_machine)
 		end

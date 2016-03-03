@@ -75,7 +75,7 @@ feature {NONE} -- Implementation: State-related
 
 	post_trigger_feature (a_data: detachable ANY)
 		do
-			
+
 		end
 
 	blah_data: INTEGER

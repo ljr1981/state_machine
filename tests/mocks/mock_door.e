@@ -17,8 +17,9 @@ feature {NONE} -- Initialization
 	pre_make_initialization
 			-- <Precursor>
 		do
-			-- Prep with start state
 			make_closed
+		ensure then
+			closed: is_closed and is_fully_closed
 		end
 
 	initialize_state_assertions (a_machine: SM_MACHINE)
@@ -107,8 +108,10 @@ feature -- Transition Triggers
 		end
 
 	open_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
+			-- `open_agent' for `open' of Current {MOCK_DOOR}.
 
 	set_open_agent (a_agent: like open_agent)
+			-- `set_open_agent' with `a_agent'.
 		do
 			open_agent := a_agent
 		end
@@ -120,8 +123,10 @@ feature -- Transition Triggers
 		end
 
 	close_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
+			-- `close_agent' for `close' of Current {MOCK_DOOR}.
 
 	set_close_agent (a_agent: like close_agent)
+			-- `set_close_agent' with `a_agent'.
 		do
 			close_agent := a_agent
 		end
