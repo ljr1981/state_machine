@@ -27,6 +27,17 @@ feature -- Test routines
 			-- `state_machine_pub_sub_tests' for testing FSM's with the PUB-SUB model.
 		note
 			testing:  "execution/isolated"
+			design: "[
+				Create a machine and a mock to manage. Give the machine to the
+				mock and so the mock can set up its own state management through
+				the given machine.
+				
+				Test the mock to ensure that calls to its "trigger features" has
+				the desired effect (transitions fire and state changes).
+				
+				Test the machine to ensure that calls to its transit features
+				will also cause the states to change.
+				]"
 		local
 			l_machine: MOCK_MACHINE
 			l_mock: MOCK_DOOR
