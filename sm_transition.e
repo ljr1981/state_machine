@@ -45,7 +45,7 @@ feature {NONE} -- Initialization
 			post_operations_set: post_transition_operations ~ a_post_transition_operations
 		end
 
-feature -- Access
+feature {SM_MACHINE} -- Access
 
 	start,
 	stop: INTEGER
