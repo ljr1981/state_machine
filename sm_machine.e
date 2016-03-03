@@ -22,10 +22,7 @@ inherit
 		export {NONE}
 			add_publication,
 			add_publications,
-			add_subscription_agents,
-			--publications,
-			subscribe_to_publication --,
-			--subscriptions
+			add_subscription_agents
 		end
 
 feature -- Basic Operations
