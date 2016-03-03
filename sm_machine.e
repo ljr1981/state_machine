@@ -20,6 +20,11 @@ inherit
 			subscriber_add_subscription as add_transition_event,
 			publisher_add_subscription as add_post_transition_event
 		export {NONE}
+			subscribe_to,
+			subscriptions,
+			publish_by_id,
+			published_by_uuid_string,
+			published_by_uuid,
 			add_publication,
 			add_publications,
 			add_subscription_agents
@@ -133,7 +138,7 @@ feature -- Settings
 			added: transitions.count = old transitions.count + 1
 		end
 
-feature -- Query
+feature -- Status Report
 
 	current_state_id: INTEGER
 			-- `current_state_id' of Current.
@@ -163,39 +168,6 @@ feature -- Query
 				end
 			end
 			current_state_id := l_result
-		end
-
-	is_only_one_current: BOOLEAN
-				-- For all current states `is_only_one_current'.
-		do
-			Result := count_of_is_current_states = 1
-		end
-
-	count_of_is_current_states: INTEGER
-			-- Count of `states' that are `is_current'.
-		note
-			synopsis: "[
-				Iterate `states' counting how many have `state_assertions' returning all True.
-				]"
-			design: "[
-				While the answer ought always be zero or one, this assertion is an invariant
-				so it is not applied here as an ensure. See `none_or_one' invariant.
-				]"
-		do
-			across
-				states as ic_states
-			loop
-				if
-					across
-						ic_states.item.state_assertions as ic_state_assertions
-					all
-						attached {FUNCTION [ANY, TUPLE, BOOLEAN]} ic_state_assertions.item as al_assertion_agent and then
-							al_assertion_agent.item ([Void])
-					end
-				then
-					Result := Result + 1
-				end
-			end
 		end
 
 	state_count: INTEGER
@@ -243,6 +215,41 @@ feature -- Query
 				end
 			else
 				Result := False
+			end
+		end
+
+feature {SM_OBJECT, EQA_TEST_SET} -- Implementation: Status Report
+
+	is_only_one_current: BOOLEAN
+				-- For all current states `is_only_one_current'.
+		do
+			Result := count_of_is_current_states = 1
+		end
+
+	count_of_is_current_states: INTEGER
+			-- Count of `states' that are `is_current'.
+		note
+			synopsis: "[
+				Iterate `states' counting how many have `state_assertions' returning all True.
+				]"
+			design: "[
+				While the answer ought always be zero or one, this assertion is an invariant
+				so it is not applied here as an ensure. See `none_or_one' invariant.
+				]"
+		do
+			across
+				states as ic_states
+			loop
+				if
+					across
+						ic_states.item.state_assertions as ic_state_assertions
+					all
+						attached {FUNCTION [ANY, TUPLE, BOOLEAN]} ic_state_assertions.item as al_assertion_agent and then
+							al_assertion_agent.item ([Void])
+					end
+				then
+					Result := Result + 1
+				end
 			end
 		end
 
