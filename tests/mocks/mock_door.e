@@ -18,6 +18,8 @@ feature {NONE} -- Initialization
 			-- <Precursor>
 		do
 			make_closed
+			create open
+			create close
 		ensure then
 			closed: is_closed and is_fully_closed
 		end
@@ -33,22 +35,22 @@ feature {NONE} -- Initialization
 			-- <Precursor>
 		do
 			a_machine.add_transitions (<<
-										create {SM_TRANSITION}.make (1, 2, agent set_open_agent, <<agent set_opened>>, <<agent set_fully_opened>>),
-										create {SM_TRANSITION}.make (2, 1, agent set_close_agent, <<agent set_closed>>, <<agent set_fully_closed>>)
+					create {SM_TRANSITION}.make (1, 2, agent open.set_event_agent, <<agent set_opened>>, <<agent set_fully_opened>>),
+					create {SM_TRANSITION}.make (2, 1, agent close.set_event_agent, <<agent set_closed>>, <<agent set_fully_closed>>)
 										>>)
 		end
 
 feature {NONE} -- Initialization: Current
 
 	make_opened
-			-- `make_opened'.
+			-- Initialize Current {MOCK_DOOR} with `make_opened'.
 		do
 			is_opened := True
 			is_fully_opened := True
 		end
 
 	make_closed
-			-- `make_closed'.
+			-- Initialize Current {MOCK_DOOR} with `make_closed'.
 		do
 			is_closed := True
 			is_fully_closed := True
@@ -67,7 +69,7 @@ feature -- State Assertions
 feature -- Transition Operations
 
 	set_opened
-			-- Set `is_opened'
+			-- Set `is_opened'.
 		do
 			is_opened := True
 			is_fully_opened := False
@@ -76,6 +78,7 @@ feature -- Transition Operations
 		end
 
 	set_fully_opened
+			-- Set `is_fully_opened'.
 		do
 			is_opened := True
 			is_fully_opened := True
@@ -84,6 +87,7 @@ feature -- Transition Operations
 		end
 
 	set_closed
+			-- Set `is_closed'.
 		do
 			is_opened := False
 			is_fully_opened := False
@@ -92,6 +96,7 @@ feature -- Transition Operations
 		end
 
 	set_fully_closed
+			-- Set `is_fully_closed'.
 		do
 			is_opened := False
 			is_fully_opened := False
@@ -101,35 +106,11 @@ feature -- Transition Operations
 
 feature -- Transition Triggers
 
-	open (a_data: detachable ANY)
-			-- `open' Current {MOCK_DOOR}.
-		do
-			check attached open_agent as al_agent then al_agent.call (a_data) end
-		end
+	open: SM_TRIGGER
+			-- Trigger `open' Current {MOCK_DOOR}.
 
-	open_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
-			-- `open_agent' for `open' of Current {MOCK_DOOR}.
-
-	set_open_agent (a_agent: like open_agent)
-			-- `set_open_agent' with `a_agent'.
-		do
-			open_agent := a_agent
-		end
-
-	close (a_data: detachable ANY)
-			-- `close' Current {MOCK_DOOR}.
-		do
-			check attached close_agent as al_agent then al_agent.call (a_data) end
-		end
-
-	close_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
-			-- `close_agent' for `close' of Current {MOCK_DOOR}.
-
-	set_close_agent (a_agent: like close_agent)
-			-- `set_close_agent' with `a_agent'.
-		do
-			close_agent := a_agent
-		end
+	close: SM_TRIGGER
+			-- Trigger `close' Current {MOCK_DOOR}.
 
 invariant
 	some_opened: (is_opened or is_fully_opened) implies (not is_closed and not is_fully_closed)

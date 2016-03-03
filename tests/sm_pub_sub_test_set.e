@@ -46,12 +46,12 @@ feature -- Test routines
 			create l_mock.make_with_machine (l_machine)
 
 				-- Attempt to open ...
-			l_mock.open (Void)
+			l_mock.open.do_event ([Void])
 			assert ("test_is_opened", l_mock.is_opened)
 			assert ("test_is_fully_opened", l_mock.is_fully_opened)
 
 				-- Attempt to close ...
-			l_mock.close (Void)
+			l_mock.close.do_event ([Void])
 			assert ("test_is_closed", l_mock.is_closed)
 			assert ("test_is_fully_closed", l_mock.is_fully_closed)
 

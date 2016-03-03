@@ -34,11 +34,16 @@ feature {NONE} -- Initialization
 
 	initialize_state_assertions (a_machine: SM_MACHINE)
 			-- `initialize_state_assertions' in `a_machine'.
+			-- Use {SM_MACHINE}.add_state to implement.
+			-- First item is Default_state at end of creation cycle.
+			-- See {MOCK_DOOR}.initialize_state_assertions in test target.
 		deferred
 		end
 
 	initialize_transition_operations (a_machine: SM_MACHINE)
 			-- `initialize_transition_operations' in `a_machine'.
+			-- Use {SM_MACHINE}.add_transitions to implement.
+			-- See {MOCK_DOOR}.initialize_transition_operations in test target.
 		deferred
 		end
 

@@ -43,12 +43,12 @@ feature -- Basic Operations
 					across
 						ic_transitions.item.operations as ic_operations
 					loop
-						ic_operations.item.call (Void)
+						ic_operations.item.call ([Void])
 					end
 					across
 						ic_transitions.item.post_transition_operations as ic_post_ops
 					loop
-						ic_post_ops.item.call (Void)
+						ic_post_ops.item.call ([Void])
 					end
 				end
 			end
@@ -115,6 +115,8 @@ feature -- Settings
 
 	add_transitions (a_transitions: ARRAY [attached like Transition_pair_value_anchor])
 			-- `add_transitions' from `a_transitions' list using `add_transition'.
+			-- `a_transitions' as an ARRAY of detachable {SM_TRANSITION} items.
+			-- Send `a_start', `a_stop', `a_trigger_callback_agent', `a_operations', and `a_post_transition_operations'.
 		do
 			across a_transitions as ic_transitions loop add_transition (ic_transitions.item) end
 			compute_current_state_id
