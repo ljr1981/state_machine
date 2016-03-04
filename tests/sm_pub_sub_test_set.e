@@ -26,11 +26,9 @@ feature -- Test routines
 	turnstile_tests
 			-- `turnstile_tests'
 		local
-			l_machine: MOCK_MACHINE
 			l_mock: MOCK_TURNSTILE
 		do
-			create l_machine
-			create l_mock.make_with_machine (l_machine)
+			create l_mock.make_with_machine (create {MOCK_MACHINE})
 
 			l_mock.locked_push.start ([Void])
 			assert ("test_is_locked_1", l_mock.is_locked)

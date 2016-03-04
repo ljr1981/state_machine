@@ -16,7 +16,7 @@ deferred class
 
 inherit
 	SM_ANY
-	
+
 	PS_PUBLISHER_SUBSCRIBER [detachable ANY]
 		rename
 			subscriber_add_subscription as add_transition_event,
@@ -203,7 +203,7 @@ feature -- Status Report
 				ic_transitions.item.start = a_start and ic_transitions.item.stop = a_stop
 			end
 		ensure
-			empty_implies_false: (transitions.count = 0) implies not Result
+			empty_implies_false: transitions.is_empty implies not Result
 		end
 
 	has_transition (a_transition: attached like transition_pair_value_anchor): BOOLEAN
