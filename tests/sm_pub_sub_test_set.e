@@ -24,6 +24,7 @@ inherit
 feature -- Test routines
 
 	turnstile_tests
+			-- `turnstile_tests'
 		local
 			l_machine: MOCK_MACHINE
 			l_mock: MOCK_TURNSTILE
