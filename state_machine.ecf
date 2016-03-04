@@ -7,9 +7,12 @@
 			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>
+		<setting name="concurrency" value="scoop"/>
 		<library name="base" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
+		<library name="process" location="$ISE_LIBRARY\library\process\process-safe.ecf"/>
 		<library name="pub_sub" location="$GITHUB\pub_sub\pub_sub.ecf"/>
 		<library name="randomizer" location="$GITHUB\randomizer\randomizer.ecf"/>
+		<library name="thread" location="$ISE_LIBRARY\library\thread\thread-safe.ecf"/>
 		<library name="uuid" location="$ISE_LIBRARY\library\uuid\uuid-safe.ecf"/>
 		<cluster name="state_machine" location=".\" recursive="true">
 			<file_rule>

@@ -28,10 +28,21 @@ feature -- Test routines
 		local
 			l_mock: MOCK_TURNSTILE
 			l_machine: MOCK_MACHINE
+			l_process: PROCESS_IMP
+			l_file: PLAIN_TEXT_FILE
 		do
 			create l_machine
 			create l_mock.make_with_machine (l_machine)
 			assert_strings_equal ("graphviz", turnstile_graph, l_machine.graph_out)
+
+				-- Generate to file
+			create l_file.make_create_read_write ("turnstile_2.txt")
+			l_file.put_string (l_machine.graph_out)
+			l_file.close
+
+			create l_process.make_with_command_line ("$GITHUB\state_machine\dot.exe turnstile_2.txt -Tpng > turnstile_2.png", Void)
+			l_process.set_hidden (False)
+			l_process.launch
 		end
 
 feature {NONE} -- Test Support: Graph Out
