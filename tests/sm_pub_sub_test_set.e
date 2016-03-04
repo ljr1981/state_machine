@@ -35,17 +35,45 @@ feature -- Test routines
 			create l_mock.make_with_machine (l_machine)
 			assert_strings_equal ("graphviz", turnstile_graph, l_machine.graph_out)
 
-				-- Generate to file
-			create l_file.make_create_read_write ("turnstile_2.txt")
-			l_file.put_string (l_machine.graph_out)
-			l_file.close
+			generate_graph_outs (l_machine, "turnstile_2", "dot_turnstile")
+		end
 
-			create l_process.make_with_command_line ("$GITHUB\state_machine\dot.exe turnstile_2.txt -Tpng > turnstile_2.png", Void)
-			l_process.set_hidden (False)
-			l_process.launch
+	door_graph_out
+			-- `door_graph_out'
+		local
+			l_mock: MOCK_DOOR
+			l_machine: MOCK_MACHINE
+			l_process: PROCESS_IMP
+			l_file: PLAIN_TEXT_FILE
+		do
+			create l_machine
+			create l_mock.make_with_machine (l_machine)
+--			assert_strings_equal ("graphviz", turnstile_graph, l_machine.graph_out)
+
+			generate_graph_outs (l_machine, "door", "dot_door")
 		end
 
 feature {NONE} -- Test Support: Graph Out
+
+	generate_graph_outs (a_machine: SM_MACHINE; a_output_name, a_cmd_name: STRING)
+		local
+			l_process: PROCESS_IMP
+			l_file: PLAIN_TEXT_FILE
+		do
+				-- Generate to file
+			create l_file.make_create_read_write (a_output_name + ".txt")
+			l_file.put_string (a_machine.graph_out)
+			l_file.close
+
+				-- Generate CMD file
+			create l_file.make_create_read_write (a_cmd_name + ".cmd")
+			l_file.put_string ("bin\dot.exe " + a_output_name + ".txt -Tpng > " + a_output_name + ".png")
+			l_file.close
+
+			create l_process.make_with_command_line (a_cmd_name + ".cmd", Void)
+			l_process.set_hidden (False)
+			l_process.launch
+		end
 
 	turnstile_graph: STRING = "digraph finite_state_machine {rankdir=LR;size=%"8,5%" node [shape = circle];S1 -> S1 [ label = %"S1 -> S1%" ];S1 -> S2 [ label = %"S1 -> S2%" ];S2 -> S1 [ label = %"S2 -> S1%" ];S2 -> S2 [ label = %"S2 -> S2%" ];}"
 

@@ -1,0 +1,1 @@
+bin\dot.exe turnstile_2.txt -Tpng > turnstile_2.png

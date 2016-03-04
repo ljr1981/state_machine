@@ -1,0 +1,1 @@
+bin\dot.exe door.txt -Tpng > door.png
