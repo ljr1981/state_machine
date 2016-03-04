@@ -14,6 +14,20 @@ note
 		(3) Because SM_TRIGGERs are all the same, it is more readable to put them
 			in a comma-delimited list with a single type-reference for all of them.
 		]"
+	graph: "[
+digraph finite_state_machine {
+	rankdir=LR;
+	size="8,5"
+	node [shape = doublecircle]; Locked Unlocked;
+	node [shape = circle];
+	Locked -> Unlocked [ label = "Coin" ];
+	Unlocked -> Locked [ label = "Push" ];
+	Locked -> Locked [ label = "Push" ];
+	Unlocked -> Unlocked [ label = "Coin" ];
+}
+		]"
+	EIS: "src=$GITHUB/state_machine/docs/turnstile.png"
+
 
 class
 	MOCK_TURNSTILE

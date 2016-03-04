@@ -23,6 +23,23 @@ inherit
 
 feature -- Test routines
 
+	turnstile_graph_out
+			-- `turnstile_graph_out'
+		local
+			l_mock: MOCK_TURNSTILE
+			l_machine: MOCK_MACHINE
+		do
+			create l_machine
+			create l_mock.make_with_machine (l_machine)
+			assert_strings_equal ("graphviz", turnstile_graph, l_machine.graph_out)
+		end
+
+feature {NONE} -- Test Support: Graph Out
+
+	turnstile_graph: STRING = "digraph finite_state_machine {rankdir=LR;size=%"8,5%" node [shape = circle];S1 -> S1 [ label = %"S1 -> S1%" ];S1 -> S2 [ label = %"S1 -> S2%" ];S2 -> S1 [ label = %"S2 -> S1%" ];S2 -> S2 [ label = %"S2 -> S2%" ];}"
+
+feature -- Other tests
+
 	turnstile_tests
 			-- `turnstile_tests'
 		local

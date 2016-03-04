@@ -32,6 +32,8 @@ inherit
 			add_subscription_agents
 		end
 
+	SM_GRAPH
+
 feature -- Basic Operations
 
 	transit (a_start, a_stop: INTEGER)
@@ -218,6 +220,31 @@ feature -- Status Report
 			else
 				Result := False
 			end
+		end
+
+feature -- Outputs
+
+	graph_out: STRING
+			-- <Precursor>
+		local
+			l_tran: SM_TRANSITION
+			l_output,
+			l_nodes,
+			l_node: STRING
+		do
+			Result := graph_template.twin
+			create l_nodes.make_empty
+			across
+				transitions as ic_transitions
+			loop
+				l_node := node_template.twin
+				l_tran := ic_transitions.item
+				l_node.replace_substring_all ("<<FROM>>", "S" + l_tran.start.out)
+				l_node.replace_substring_all ("<<TO>>", "S" + l_tran.stop.out)
+				l_node.replace_substring_all ("<<LABEL>>", "S" + l_tran.start.out + " -> S" + l_tran.stop.out)
+				l_nodes.append_string_general (l_node)
+			end
+			Result.replace_substring_all ("<<NODES>>", l_nodes)
 		end
 
 feature {SM_OBJECT, EQA_TEST_SET} -- Implementation: Status Report
