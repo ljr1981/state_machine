@@ -15,6 +15,8 @@ deferred class
 	SM_MACHINE
 
 inherit
+	SM_ANY
+	
 	PS_PUBLISHER_SUBSCRIBER [detachable ANY]
 		rename
 			subscriber_add_subscription as add_transition_event,

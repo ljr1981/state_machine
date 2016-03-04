@@ -19,6 +19,9 @@ note
 class
 	SM_TRIGGER
 
+inherit
+	SM_ANY
+	
 feature -- Access
 
 	start (a_data: detachable ANY)

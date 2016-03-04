@@ -26,6 +26,8 @@ deferred class
 	SM_OBJECT
 
 inherit
+	SM_ANY
+
 	PS_PUBLISHER_SUBSCRIBER [detachable ANY]
 		rename
 			subscriber_add_subscription as add_post_transition_event, 		-- Object subscribes to machine post-events

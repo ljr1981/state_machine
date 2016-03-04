@@ -19,6 +19,9 @@ note
 class
 	SM_TRANSITION
 
+inherit
+	SM_ANY
+	
 create
 	make
 
