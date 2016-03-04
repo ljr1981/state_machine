@@ -31,13 +31,13 @@ feature -- Test routines
 			create l_machine
 			create l_mock.make_with_machine (l_machine)
 
-			l_mock.locked_push.do_event ([Void])
+			l_mock.locked_push.start ([Void])
 			assert ("test_is_locked_1", l_mock.is_locked)
-			l_mock.locked_coin.do_event ([Void])
+			l_mock.locked_coin.start ([Void])
 			assert ("test_is_unlocked_1", l_mock.is_unlocked)
-			l_mock.unlocked_coin.do_event ([Void])
+			l_mock.unlocked_coin.start ([Void])
 			assert ("test_is_unlocked_2", l_mock.is_unlocked)
-			l_mock.unlocked_push.do_event ([Void])
+			l_mock.unlocked_push.start ([Void])
 			assert ("test_is_locked_2", l_mock.is_locked)
 		end
 
@@ -64,12 +64,12 @@ feature -- Test routines
 			create l_mock.make_with_machine (l_machine)
 
 				-- Attempt to open ...
-			l_mock.open.do_event ([Void])
+			l_mock.open.start ([Void])
 			assert ("test_is_opened", l_mock.is_opened)
 			assert ("test_is_fully_opened", l_mock.is_fully_opened)
 
 				-- Attempt to close ...
-			l_mock.close.do_event ([Void])
+			l_mock.close.start ([Void])
 			assert ("test_is_closed", l_mock.is_closed)
 			assert ("test_is_fully_closed", l_mock.is_fully_closed)
 

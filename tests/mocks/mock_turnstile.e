@@ -3,6 +3,17 @@ note
 		Representation of a {MOCK_TURNSTILE}.
 		]"
 	EIS: "src=https://en.wikipedia.org/wiki/Finite-state_machine#Example:_coin-operated_turnstile"
+	design: "[
+		There are a number of items to note in the design that are different
+		from the {MOCK_DOOR} example:
+		
+		(1) Removed "magic numbers", which helps greatly in making state-trans 
+			def's more readable.
+		(2) Consolidated the BOOLEAN states of locked/unlocked to a single attribute
+			with a toggled-BOOLEAN-query (`is_unlocked').
+		(3) Because SM_TRIGGERs are all the same, it is more readable to put them
+			in a comma-delimited list with a single type-reference for all of them.
+		]"
 
 class
 	MOCK_TURNSTILE
@@ -34,11 +45,11 @@ feature {NONE} -- Initialization: FSM
 	initialize_transition_operations (a_machine: SM_MACHINE)
 			-- <Precursor>
 		do
-			a_machine.add_transitions (<<		-- From		To			set on-Trigger							do Transition ops							Post-trans ops
-					create {SM_TRANSITION}.make (locked, 	locked, 	agent locked_push.set_do_agent, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
-					create {SM_TRANSITION}.make (locked, 	unlocked, 	agent locked_coin.set_do_agent, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>),
-					create {SM_TRANSITION}.make (unlocked, 	locked, 	agent unlocked_push.set_do_agent, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
-					create {SM_TRANSITION}.make (unlocked, 	unlocked, 	agent unlocked_coin.set_do_agent, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>)
+			a_machine.add_transitions (<<		-- From		To			set on-Trigger							do Transition ops					Post-trans ops
+					create {SM_TRANSITION}.make (locked, 	locked, 	agent locked_push.set, 			<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
+					create {SM_TRANSITION}.make (locked, 	unlocked, 	agent locked_coin.set, 			<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>),
+					create {SM_TRANSITION}.make (unlocked, 	locked, 	agent unlocked_push.set, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
+					create {SM_TRANSITION}.make (unlocked, 	unlocked, 	agent unlocked_coin.set, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>)
 										>>)
 		end
 

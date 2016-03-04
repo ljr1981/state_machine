@@ -21,21 +21,21 @@ class
 
 feature -- Access
 
-	do_event (a_data: detachable ANY)
-			-- `do_event' of Current {SM_TRIGGER} with optional `a_data'.
+	start (a_data: detachable ANY)
+			-- `start' of Current {SM_TRIGGER} with optional `a_data'.
 		do
-			check attached do_agent as al_agent then al_agent.call (a_data) end
+			check attached start_agent as al_agent then al_agent.call (a_data) end
 		end
 
 feature {SM_OBJECT} -- Implementation
 
-	do_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
-			-- `do_agent' for `do_event' of Current {SM_TRIGGER}.
+	start_agent: detachable PROCEDURE [ANY, TUPLE [detachable ANY]]
+			-- `start_agent' for `start' of Current {SM_TRIGGER}.
 
-	set_do_agent (a_agent: like do_agent)
-			-- `set_do_agent' with `a_agent'.
+	set (a_agent: like start_agent)
+			-- `set' `start_agent' with `a_agent'.
 		do
-			do_agent := a_agent
+			start_agent := a_agent
 		end
 
 end
