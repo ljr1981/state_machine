@@ -21,7 +21,7 @@ class
 
 inherit
 	SM_ANY
-	
+
 create
 	make
 
@@ -59,10 +59,10 @@ feature {SM_MACHINE} -- Access
 	stop: INTEGER
 			-- `start' and `stop' state IDs for Current {SM_TRANSITION}.
 
-	operations: ARRAY [PROCEDURE]
+	operations: ARRAY [attached like operations_anchor]
 			-- List of `operations' for Current {SM_TRANSITION}.
 
-	post_transition_operations: ARRAY [PROCEDURE]
+	post_transition_operations: ARRAY [attached like operations_anchor]
 			-- List of `post_transition_operations' for Current {SM_TRANSITION}.
 
 	uuid: UUID
@@ -84,5 +84,10 @@ feature {NONE} -- Implementation: Access
 		once
 			create Result
 		end
+
+feature {NONE} -- Implementation: Anchor
+
+	operations_anchor: detachable PROCEDURE [ANY , TUPLE]
+			-- `operations_anchor' type anchor for Current {SM_TRANSITION}.
 
 end
