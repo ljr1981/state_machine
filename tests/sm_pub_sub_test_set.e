@@ -25,11 +25,11 @@ feature -- Test routines
 
 	turnstile_graph_out
 			-- `turnstile_graph_out'
+		note
+			EIS: "name=correctness_proof", "src=$GITHUB/state_machine/turnstile_2.png"
 		local
 			l_mock: MOCK_TURNSTILE
 			l_machine: MOCK_MACHINE
-			l_process: PROCESS_IMP
-			l_file: PLAIN_TEXT_FILE
 		do
 			create l_machine
 			create l_mock.make_with_machine (l_machine)
@@ -40,6 +40,8 @@ feature -- Test routines
 
 	door_graph_out
 			-- `door_graph_out'
+		note
+			EIS: "name=correctness_proof", "src=$GITHUB/state_machine/door.png"
 		local
 			l_mock: MOCK_DOOR
 			l_machine: MOCK_MACHINE
