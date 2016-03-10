@@ -77,7 +77,7 @@ feature {NONE} -- Test Support: Graph Out
 			l_process.launch
 		end
 
-	turnstile_graph: STRING = "digraph finite_state_machine {rankdir=LR;size=%"8,5%" node [shape = circle];S1 -> S1 [ label = %"S1 -> S1%" ];S1 -> S2 [ label = %"S1 -> S2%" ];S2 -> S1 [ label = %"S2 -> S1%" ];S2 -> S2 [ label = %"S2 -> S2%" ];}"
+	turnstile_graph: STRING = "digraph finite_state_machine {rankdir=LR;size=%"8,5%" node [shape = circle];S1 -> S1 [ label = %"Push%" ];S1 -> S2 [ label = %"Coin%" ];S2 -> S1 [ label = %"Push%" ];S2 -> S2 [ label = %"Coin%" ];}"
 
 feature -- Other tests
 

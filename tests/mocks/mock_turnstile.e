@@ -59,11 +59,11 @@ feature {NONE} -- Initialization: FSM
 	initialize_transition_operations (a_machine: SM_MACHINE)
 			-- <Precursor>
 		do
-			a_machine.add_transitions (<<		-- From		To			set on-Trigger							do Transition ops					Post-trans ops
-					create {SM_TRANSITION}.make (locked, 	locked, 	agent locked_push.set, 			<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
-					create {SM_TRANSITION}.make (locked, 	unlocked, 	agent locked_coin.set, 			<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>),
-					create {SM_TRANSITION}.make (unlocked, 	locked, 	agent unlocked_push.set, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
-					create {SM_TRANSITION}.make (unlocked, 	unlocked, 	agent unlocked_coin.set, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>)
+			a_machine.add_transitions (<<		-- From		To					set on-Trigger							do Transition ops					Post-trans ops
+					create {SM_TRANSITION}.make ([locked, 	locked, "Push"], 	agent locked_push.set, 			<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
+					create {SM_TRANSITION}.make ([locked, 	unlocked, "Coin"], 	agent locked_coin.set, 			<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>),
+					create {SM_TRANSITION}.make ([unlocked, locked, "Push"], 	agent unlocked_push.set, 		<<agent set_turnstile_lock_to (lock_it)>>, 		<<>>),
+					create {SM_TRANSITION}.make ([unlocked, unlocked, "Coin"], 	agent unlocked_coin.set, 		<<agent set_turnstile_lock_to (unlock_it)>>, 	<<>>)
 										>>)
 		end
 
