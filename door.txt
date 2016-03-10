@@ -1,1 +1,1 @@
-digraph finite_state_machine {rankdir=LR;size="8,5" node [shape = circle];S1 -> S2 [ label = "Open" ];S2 -> S1 [ label = "Close" ];}
+digraph finite_state_machine {rankdir=LR;size="8,5" node [shape = circle];Closed -> Opened [ label = "Open" ];Opened -> Closed [ label = "Close" ];}

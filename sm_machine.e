@@ -239,12 +239,20 @@ feature -- Outputs
 			loop
 				l_node := node_template.twin
 				l_tran := ic_transitions.item
-				l_node.replace_substring_all ("<<FROM>>", "S" + l_tran.start.out)
-				l_node.replace_substring_all ("<<TO>>", "S" + l_tran.stop.out)
+				l_node.replace_substring_all ("<<FROM>>", state_name (l_tran.start))
+				l_node.replace_substring_all ("<<TO>>", state_name (l_tran.stop))
 				l_node.replace_substring_all ("<<LABEL>>", l_tran.name)
 				l_nodes.append_string_general (l_node)
 			end
 			Result.replace_substring_all ("<<NODES>>", l_nodes)
+		end
+
+	state_name (a_state_id: INTEGER): STRING
+		do
+			create Result.make_empty
+			check attached {like States_value_anchor} states.item (a_state_id) as al_state then
+				Result := al_state.name
+			end
 		end
 
 feature {SM_OBJECT, EQA_TEST_SET} -- Implementation: Status Report
@@ -290,7 +298,7 @@ feature {NONE} -- Implementation
 			create Result.make (default_state_capacity)
 		end
 
-	States_value_anchor: detachable TUPLE [state_assertions: ARRAY [FUNCTION [ANY, TUPLE, BOOLEAN]] ]
+	States_value_anchor: detachable TUPLE [state_assertions: ARRAY [FUNCTION [ANY, TUPLE, BOOLEAN]]; name: STRING]
 			-- `states_value_anchor' with list of {Q}-qualifying `state_assertions', and list of `stop_state_ids'.
 		note
 			synopsis: "[

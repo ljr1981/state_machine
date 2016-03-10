@@ -52,8 +52,8 @@ feature {NONE} -- Initialization: FSM
 	initialize_state_assertions (a_machine: SM_MACHINE)
 			-- <Precursor>
 		do
-			a_machine.add_state ([<<agent is_locked>>])
-			a_machine.add_state ([<<agent is_unlocked>>])
+			a_machine.add_state ([<<agent is_locked>>, "Locked"])
+			a_machine.add_state ([<<agent is_unlocked>>, "Unlocked"])
 		end
 
 	initialize_transition_operations (a_machine: SM_MACHINE)

@@ -39,11 +39,11 @@ feature -- Test routines
 			assert_integers_equal ("zero_count", 0, l_machine.state_count)
 
 				-- Add a state and test for the `current_state_id'
-			l_machine.add_states (<<[<<agent is_one>>]>>)
+			l_machine.add_states (<<[<<agent is_one>>, "One"]>>)
 			assert_integers_equal ("state_1", 1, l_machine.current_state_id)
 
 				-- Add another state and test to ensure first is still `current_state_id'.
-			l_machine.add_states (<<[<<agent is_two>>]>>)
+			l_machine.add_states (<<[<<agent is_two>>, "Two"]>>)
 			assert_integers_equal ("state_1", 1, l_machine.current_state_id)
 			assert_integers_not_equal ("not_other", 2, l_machine.current_state_id)
 
