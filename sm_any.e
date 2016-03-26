@@ -1,9 +1,9 @@
 note
 	description: "[
-		Abstract notion of an {SM_ANY}
+		Representation of an {SM_ANY}
 		]"
 
-deferred class
+class
 	SM_ANY
 
 end

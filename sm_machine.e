@@ -74,19 +74,27 @@ feature -- Basic Operations
 			one_transit: transition_count_from_current_state_id = 1
 			at_least_two: state_count >= 2
 		local
-			l_old_state: INTEGER
+			l_old_state_id: INTEGER
 		do
 			compute_current_state_id
 			across
 				transitions as ic_transitions
 			from
-				l_old_state := current_state_id
+				l_old_state_id := current_state_id
 			until
-				l_old_state /= current_state_id
+				l_old_state_id /= current_state_id
 			loop
 				if ic_transitions.item.start = current_state_id then
-					across ic_transitions.item.operations as ic_operations loop ic_operations.item.call ([Void]) end
-					across ic_transitions.item.post_transition_operations as ic_post_ops loop ic_post_ops.item.call ([Void])  end
+					across
+						ic_transitions.item.operations as ic_operations
+					loop
+						ic_operations.item.call ([Void])
+					end
+					across
+						ic_transitions.item.post_transition_operations as ic_post_ops
+					loop
+						ic_post_ops.item.call ([Void])
+					end
 				end
 			end
 			compute_current_state_id
