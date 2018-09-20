@@ -1,0 +1,15 @@
+package state_machine
+
+project
+	state_machine = "state_machine.ecf"
+
+note
+	title: State Machine
+	description: "Classes which know how to model state machines"
+
+	tags: state,machine
+	license: Eiffel Forum License v2 
+	copyright: 2018 Larry Rix
+	link[license]: http://www.eiffel.com/licensing/forum.txt external
+
+end
